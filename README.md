@@ -56,9 +56,9 @@ $env:PATH="$env:JAVA_HOME\bin;$env:PATH"
 ./gradlew.bat bootRun
 ```
 
-브라우저에서 다음 주소로 접속할 수 있습니다.
-- http://localhost:8081
-- http://localhost:8081/api/products
+실행 후 로컬 브라우저에서 아래 주소를 확인할 수 있습니다.
+- localhost:8081
+- localhost:8081/api/products
 
 Orders (1) : (N) Order_Items
 
