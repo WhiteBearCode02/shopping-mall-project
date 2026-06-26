@@ -1,0 +1,46 @@
+package com.example.shoppingmall.domain.product.entity;
+
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Getter
+@Table(name = "products")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Product {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "product_id")
+    private Long id;
+
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
+    private Integer price;
+
+    @Column(nullable = false)
+    private Integer stockQuantity; // 재고 수량 (Step 5 동시성 제어의 핵심 컬럼)
+
+    @Builder
+    public Product(String name, Integer price, Integer stockQuantity) {
+        this.name = name;
+        this.price = price;
+        this.stockQuantity = stockQuantity;
+    }
+
+    /**
+     * 비즈니스 로직: 재고 감소
+     */
+    public void removeStock(int quantity) {
+        int restStock = this.stockQuantity - quantity;
+        if (restStock < 0) {
+            throw new IllegalArgumentException("상품의 재고가 부족합니다.");
+        }
+        this.stockQuantity = restStock;
+    }
+}
