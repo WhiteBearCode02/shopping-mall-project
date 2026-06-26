@@ -19,28 +19,31 @@ Database: MySQL
 
 Build Tool: Gradle
 
-Plaintext
+### 📁 패키지 구조
+```text
 src/main/java/com/example/shoppingmall
 ├── domain
-│   ├── user               # 회원 도메인 (회원가입, 권한 분리)
+│   ├── user              # 회원 도메인
 │   │   ├── controller
 │   │   ├── entity
 │   │   ├── repository
 │   │   └── service
-│   ├── product            # 상품 및 리뷰 도메인 (재고 관리, 복합 인덱스)
+│   ├── product           # 상품 및 리뷰 도메인
 │   │   ├── controller
 │   │   ├── entity
 │   │   ├── repository
 │   │   └── service
-│   └── order              # 주문 도메인 (다대다 관계 해소, 연관관계 편의 메서드)
+│   └── order             # 주문 도메인
 │       ├── controller
 │       ├── entity
 │       ├── repository
 │       └── service
 └── global
-    ├── config             # 인프라 및 시스템 설정
-    └── exception          # 전역 예외 처리 인터셉터
-📊 Data Architecture (ERD)
+    ├── config           # 인프라 및 시스템 설정
+    └── exception        # 전역 예외 처리
+```
+
+### 📊 Data Architecture (ERD)
 주문(Orders)과 상품(Products) 간의 다대다(N:M) 관계를 해소하고 주문 당시의 스냅샷 데이터를 보존하기 위해 중간 매핑 엔티티인 주문 상품(Order_Items) 테이블을 설계했습니다.
 
 Users (1) : (N) Orders
