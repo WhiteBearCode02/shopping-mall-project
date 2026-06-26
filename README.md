@@ -48,6 +48,18 @@ src/main/java/com/example/shoppingmall
 
 Users (1) : (N) Orders
 
+### ▶️ 실행 방법
+```bash
+cd demo
+$env:JAVA_HOME='C:\Program Files\Java\jdk-17.0.2'
+$env:PATH="$env:JAVA_HOME\bin;$env:PATH"
+./gradlew.bat bootRun
+```
+
+브라우저에서 다음 주소로 접속할 수 있습니다.
+- http://localhost:8081
+- http://localhost:8081/api/products
+
 Orders (1) : (N) Order_Items
 
 Products (1) : (N) Order_Items
