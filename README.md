@@ -57,8 +57,8 @@ $env:PATH="$env:JAVA_HOME\bin;$env:PATH"
 ```
 
 실행 후 로컬 브라우저에서 아래 주소를 확인할 수 있습니다.
-- localhost:8081
-- localhost:8081/api/products
+- 로컬 주소: localhost:8081
+- API 주소: localhost:8081/api/products
 
 Orders (1) : (N) Order_Items
 
