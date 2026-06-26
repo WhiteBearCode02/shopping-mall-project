@@ -56,9 +56,9 @@ $env:PATH="$env:JAVA_HOME\bin;$env:PATH"
 ./gradlew.bat bootRun
 ```
 
-실행 후 로컬 브라우저에서 아래 주소를 확인할 수 있습니다.
-- 로컬 주소: localhost:8081
-- API 주소: localhost:8081/api/products
+실행 후 로컬 브라우저에서 애플리케이션이 정상 동작하는지 확인할 수 있습니다.
+- 웹 진입점: 애플리케이션이 실행 중인 로컬 포트
+- API 확인: /api/products 경로
 
 Orders (1) : (N) Order_Items
 
