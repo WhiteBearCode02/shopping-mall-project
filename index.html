@@ -3,102 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>헬스기구 쇼핑몰 - 프리미엄 라인업</title>
+    <title>Premium Fitness Gear Shop</title>
     <style>
-        :root {
-            --bg-color: #f8f9fa;
-            --card-bg: #ffffff;
-            --primary-color: #212529;
-            --accent-color: #0d6efd;
-            --text-muted: #6c757d;
-            --border-color: #dee2e6;
-        }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #f8f9fa;
             margin: 0;
             padding: 40px 20px;
-            color: var(--primary-color);
+            color: #212529;
         }
-
         .container {
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
         }
-
         h1 {
             text-align: center;
-            margin-bottom: 40px;
+            font-size: 28px;
             font-weight: 700;
-            letter-spacing: -1px;
+            margin-bottom: 10px;
         }
-
+        hr {
+            border: 0;
+            height: 1px;
+            background: #dee2e6;
+            margin-bottom: 40px;
+        }
         .product-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 30px;
+            gap: 24px;
         }
-
         .product-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
+            background: #ffffff;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
             padding: 24px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.01);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-
         .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 20px rgba(0,0,0,0.08);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.06);
         }
-
         .product-name {
-            font-size: 1.25rem;
+            font-size: 18px;
             font-weight: 600;
-            margin: 0 0 12px 0;
-        }
-
-        .product-price {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--accent-color);
             margin-bottom: 8px;
         }
-
+        .product-price {
+            font-size: 16px;
+            font-weight: 700;
+            color: #0d6efd;
+            margin-bottom: 4px;
+        }
         .product-stock {
-            font-size: 0.9rem;
-            color: var(--text-muted);
+            font-size: 13px;
+            color: #6c757d;
             margin-bottom: 20px;
         }
-
         .btn-order {
-            background-color: var(--primary-color);
-            color: #fff;
+            background-color: #1a1a1a;
+            color: #ffffff;
             border: none;
-            padding: 12px;
-            border-radius: 8px;
-            font-weight: 600;
+            padding: 10px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 4px;
             cursor: pointer;
-            transition: background-color 0.2s ease;
             width: 100%;
         }
-
         .btn-order:hover {
-            background-color: var(--accent-color);
+            background-color: #0d6efd;
         }
-
         .error-message {
             grid-column: 1 / -1;
             background-color: #fff5f5;
             border: 1px solid #ffe3e3;
             color: #e53e3e;
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 6px;
             text-align: center;
             font-weight: 600;
         }
@@ -108,54 +91,52 @@
 
 <div class="container">
     <h1>🏋️‍♂️ Premium Fitness Gear Shop</h1>
+    <hr>
     
     <div id="product-container" class="product-grid">
-        </div>
+        <p style="text-align: center; grid-column: 1 / -1;">백엔드 코어 서버로부터 데이터를 안전하게 수신하는 중입니다...</p>
+    </div>
 </div>
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const container = document.getElementById("product-container");
 
-        // [아키텍처 엔드포인트 동기화] 백엔드 내장 톰캣 서버의 REST API 절대 주소를 명시적으로 링킹합니다.
+        // [네트워크 라우팅 동기화] 백엔드 내장 톰캣 서버의 REST API 엔드포인트 절대 주소 매핑
         fetch('http://localhost:8080/api/products')
             .then(response => {
-                if (!response.ok) {
-                    throw new Error(`네트워크 링크 예외 응답 모델 수신 (상태 코드: ${response.status})`);
-                }
+                if (!response.ok) throw new Error(`HTTP 통신 에러 모델 핸들링 대상 (상태코드: ${response.status})`);
                 return response.json();
             })
             .then(products => {
-                container.innerHTML = ""; // 기존의 예외 알림 스냅샷 리셋
+                container.innerHTML = ""; // 기존 안내 데스크 문구 초기화
 
                 if (products.length === 0) {
-                    container.innerHTML = `<div class="error-message">현재 데이터베이스에 진열된 상품 자원이 존재하지 않습니다.</div>`;
+                    container.innerHTML = `<div class="error-message">데이터베이스 내 진열된 상품 자원이 존재하지 않습니다.</div>`;
                     return;
                 }
 
-                // 동적 돔(DOM) 렌더링 파이프라인 조립
+                // 돔 객체 빌딩 파이프라인 가동
                 products.forEach(product => {
                     const card = document.createElement("div");
                     card.className = "product-card";
                     card.innerHTML = `
-                        <div>
-                            <h3 class="product-name">${product.name}</h3>
-                            <div class="product-price">${product.price.toLocaleString()}원</div>
-                            <div class="product-stock">남은 수량: ${product.stockQuantity}개</div>
-                        </div>
-                        <button class="btn-order" onclick="orderProduct(${product.id})">바로 주문하기</button>
+                        <div class="product-name">📦 ${product.name}</div>
+                        <div class="product-price">${product.price.toLocaleString()}원</div>
+                        <div class="product-stock">남은 수량: ${product.stockQuantity}개</div>
+                        <button class="btn-order" onclick="processOrder(${product.id})">바로 주문하기</button>
                     `;
                     container.appendChild(card);
                 });
             })
             .catch(error => {
-                console.error("API Fetch 크래시:", error);
+                console.error("비동기 API 페치 실패:", error);
                 container.innerHTML = `
                     <div class="error-message">
-                        ⚠️ 백엔드 쇼핑몰 코어 엔진 통신 실패<br>
+                        ⚠️ 백엔드 쇼핑몰 코어 엔진 통신 실패 (Failed to fetch)<br>
                         <span style="font-size: 0.85rem; font-weight: 400; color: #718096; display: block; margin-top: 8px;">
-                            원인: ${error.message} <br> 
-                            [해결조치] 터미널에서 Java 17 배포 환경이 정상 구동 중(Port: 8080)인지 확인하십시오.
+                            [원인 조치] 1. 패키지 경로 수정한 파일을 저장했는지 확인하십시오.<br>
+                            2. 터미널(demo 폴더)에서 자바 17 서버 환경이 가동 중(Port: 8080)인지 점검하십시오.
                         </span>
                     </div>
                 `;
@@ -163,10 +144,10 @@
     });
 
     /**
-     * 상품 바로 주문하기 이벤트 서브루틴 (시연 확장용)
+     * 바로 주문하기 트랜잭션 매핑 테스트 (시연 흐름 확장 전용)
      */
-    function orderProduct(productId) {
-        alert(`상품 일련번호 [ID: ${productId}] 주문 트랜잭션 파이프라인 연동 테스트 성공!`);
+    function processOrder(productId) {
+        alert(`상품 일련번호 [ID: ${productId}] 주문 처리 데이터 수신 알고리즘 연동 테스트 성공!`);
     }
 </script>
 </body>

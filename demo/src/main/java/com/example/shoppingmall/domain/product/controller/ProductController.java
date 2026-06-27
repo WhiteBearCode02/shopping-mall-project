@@ -9,7 +9,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/products")
-// [CORS 크래시 해결] Live Server 정적 자원 기본 포트인 5500번 도메인의 자원 공유를 승인합니다.
+// [CORS 보안 해결] Live Server 정적 자원 기본 포트인 5500번 도메인의 자원 공유를 승인합니다.
 @CrossOrigin(origins = "http://127.0.0.1:5500")
 public class ProductController {
 
@@ -17,8 +17,8 @@ public class ProductController {
 
     /**
      * 신규 상품 등록 API (관리자 운영 기능 확장 대비)
+     * * @param product 등록할 상품 엔티티 객체
      * 
-     * @param product 등록할 상품 엔티티 객체
      * @return 등록 완료 메시지 및 고유 식별자
      */
     @PostMapping("/new")
@@ -29,8 +29,7 @@ public class ProductController {
 
     /**
      * 상품 전체 목록 조회 API (프론트엔드 index.html 연동 대상)
-     * 
-     * @return DB에 적재된 전체 상품 JSON 리스트 데이터
+     * * @return DB에 적재된 전체 상품 JSON 리스트 데이터
      */
     @GetMapping
     public List<Product> list() {
@@ -40,8 +39,8 @@ public class ProductController {
 
     /**
      * 상품 단건 상세 조회 API (상세 페이지 정보 제공용)
+     * * @param productId 조회 타겟 상품 일련번호
      * 
-     * @param productId 조회 타겟 상품 일련번호
      * @return 검증 알고리즘을 통과한 단건 엔티티 객체
      */
     @GetMapping("/{productId}")
