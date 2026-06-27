@@ -1,31 +1,47 @@
 package com.example.shoppingmall.domain.product.entity;
 
+// [의존성 모듈 인터페이스 정의] 객체-관계 매핑(ORM) 명세 준수 및 빌더 캡슐화를 위한 자카르타 퍼시스턴스 및 롬복 임포트
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * [상품 도메인 코어 엔티티 계층 (Product Core Entity Module)]
+ * 데이터베이스의 products 테이블과 매핑되며, 쇼핑몰에서 판매하는 피트니스 용품의
+ * 원시 메타데이터를 관리하고 한정된 자원인 '재고 수량'의 차감 검증을 전담하는 도메인 모델 클래스입니다.
+ */
 @Entity
 @Getter
-@Table(name = "products")
+@Table(name = "products") // [RDB 스키마 바인딩] 관계형 데이터베이스 테이블 네임스페이스 매핑 동기화
+// [무분별한 외부 객체 생성 제어] 영속성 가상 프록시 레이어의 정상 런타임 구동을 보장하되, 외부 레이어에서 인자 없는 new 객체 임의 생성을 PROTECTED로 격리 차단합니다.
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Product {
 
+    // [기본키 식별 자원 정의] 관계형 데이터베이스의 시퀀스 자동 증가(IDENTITY) 메커니즘을 영속성 주키 알고리즘으로 동기화합니다.
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
     private Long id;
 
+    // [비즈니스 도메인 명세 필드] 상품명 텍스트 데이터 (VARCHAR 매핑 인자)
     @Column(nullable = false)
     private String name;
 
+    // [비즈니스 도메인 명세 필드] 상품 원시 판매 단가 금액 데이터
     @Column(nullable = false)
     private Integer price;
 
+    // [동시성 자원 제어 핵심 필드] 
+    // 가용 재고 수량 메타데이터입니다. 복수의 트랜잭션이 비관적 쓰기 락을 통해 이 필드의 독점 변경 권한을 획득하고자 경쟁합니다.
     @Column(nullable = false)
-    private Integer stockQuantity; // 재고 수량 (Step 5 동시성 제어의 핵심 컬럼)
+    private Integer stockQuantity;
 
+    /**
+     * [엔티티 안전 생성을 위한 불변 객체 빌더 패턴 아키텍처 스펙]
+     * 점진적 생성자 매개변수 누락 에러를 방지하고 생성 시점에 정합성이 확보된 완전한 상품 객체만 인스턴스화하도록 강제합니다.
+     */
     @Builder
     public Product(String name, Integer price, Integer stockQuantity) {
         this.name = name;
@@ -34,13 +50,22 @@ public class Product {
     }
 
     /**
-     * 비즈니스 로직: 재고 감소
+     * [핵심 도메인 비즈니스 로직 - 재고 차감 검증 알고리즘 (도메인 모델 패턴)]
+     * 외부 서비스 계층에서 엔티티 필드를 꺼내 직접 수정(세터 사용)하지 않고, 객체 스스로 상태를 제어하는 객체지향적 서브루틴입니다.
+     * 차감 연산 결과가 임계치를 하회하는 오버 트래픽 유입 시 Fail-Fast 메커니즘에 의거해 즉각 예외를 도출, 트랜잭션 전체를 원천 롤백합니다.
+     * * @param quantity 고객이 구매 요청을 보내어 차감하고자 하는 수량 인자
      */
     public void removeStock(int quantity) {
+        // 1. [잔여 재고 추론 연산] 현재 보유 중인 가용 임계치에서 요청 수량을 차감하는 서브루틴을 작동합니다.
         int restStock = this.stockQuantity - quantity;
+        
+        // 2. [임계치 하회 검증 방어벽] 연산 결과가 0 미만(재고 고갈 상태)으로 수렴하는지 인프라 분기를 실행합니다.
         if (restStock < 0) {
+            // 3. [비즈니스 예외 인터셉트] 데이터 무결성 파괴를 막기 위해 즉시 예외 객체를 상위 런타임으로 전파하여 전체 연산을 중단시킵니다.
             throw new IllegalArgumentException("상품의 재고가 부족합니다.");
         }
+        
+        // 4. [영속 상태 최종 동기화] 검증을 통과한 무결한 잔여 수량 결과값을 클래스 필드 캡슐화 메모리에 저장합니다.
         this.stockQuantity = restStock;
     }
 }
