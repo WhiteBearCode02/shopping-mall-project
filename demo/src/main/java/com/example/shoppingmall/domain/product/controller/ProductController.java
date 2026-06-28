@@ -4,7 +4,7 @@ package com.example.shoppingmall.domain.product.controller;
 import com.example.shoppingmall.domain.product.entity.Product;
 import com.example.shoppingmall.domain.product.service.ProductService;
 import lombok.Getter;
-import lombok.NoStream;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

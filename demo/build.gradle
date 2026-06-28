@@ -1,33 +1,52 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '4.1.0'
-	id 'io.spring.dependency-management' version '1.1.7'
+    id 'java'
+    // [스프링 부트 코어 프레임워크 버전 교정] 
+    // 유령 버전이었던 4.1.0 대신 안정적인 스프링 부트 3.4.2 버전을 매핑하여 원격 저장소 자원 수신 규격을 회복합니다.
+    id 'org.springframework.boot' version '3.4.2'
+    
+    // [의존성 버전 자동 관리 알고리즘 주입] 스프링 부트 버전에 호환되는 하부 라이브러리들의 버전을 최적화하여 조율합니다.
+    id 'io.spring.dependency-management' version '1.1.7'
 }
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
-	}
+    toolchain {
+        // [인프라 툴체인 동기화] 컴파일러 및 가상 머신(JVM)이 자바 17 규격 바이트코드로 파싱되도록 런타임을 고정합니다.
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }
 
 repositories {
-	mavenCentral()
+    // [오픈소스 인프라 저장소 라우팅] 전 세계 표준 메이븐 코어 중앙 저장소 체계를 가동하여 의존성 수신 파이프라인을 수립합니다.
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'com.h2database:h2'
-	implementation 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    // [웹 API 레이어 의존성 설정] 내장 톰캣(Port: 8080) 구동 및 RestController 진입점 맵핑 라이브러리 가동
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    
+    // [영속성 엔티티/레포지토리 격리 계층] 하이버네이트 ORM 기반 아키텍처 및 선언적 트랜잭션(@Transactional) 뼈대 파일 로드
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    
+    // [데이터 정합성 필터링 레이어] DTO 계층 유효성 검증(@Valid, @NotBlank 등)을 위한 아티팩트 바인딩
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    
+    // [인메모리 관계형 데이터베이스] 로컬 시연 및 테스트 정합성을 전담하는 H2 데이터베이스 드라이버 적재
+    implementation 'com.h2database:h2'
+    
+    // [롬복 컴파일 캡슐화 라이브러리] 
+    // Getter, RequiredArgsConstructor, Builder 어노테이션 바이트코드 생성을 컴파일러에 링킹합니다.
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    
+    // [테스트 레이어 통합 인프라] 스프링 컨텍스트 로딩 검증 및 JUnit5 기반 통합 테스트 프레임워크 탑재
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    // [테스트 러너 알고리즘 명시] JUnit5 웹 테스트 표준 플랫폼 플랫폼 기반의 서브루틴 가동을 명령합니다.
+    useJUnitPlatform()
 }
