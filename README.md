@@ -1,7 +1,6 @@
 # 🛒 Premium Fitness Gear Shop (E-Commerce Core Engine)
 
-![메인 화면 UI](./image_ec85bf.png)
-*(위 괄호 안의 경로는 프로젝트 내 실제 이미지 파일이 있는 상대 경로로 변경해 주세요. 예: `./docs/main_ui.png`)*
+![메인 화면 UI](./docs/main_ui.png)
 
 ## 📖 Overview
 Spring Boot 기반의 쇼핑몰 핵심 도메인 비즈니스 로직과 데이터 정합성, 그리고 조회 성능 최적화를 고려하여 설계한 백엔드 코어 엔진 프로젝트입니다. 단순 기능 구현을 넘어, 대규모 트래픽 유입과 다중 사용자 환경에서의 동시성(Concurrency) 이슈 상황을 가정하고 아키텍처를 고도화하는 데 집중했습니다.
